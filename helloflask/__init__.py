@@ -1,4 +1,4 @@
-from flask import Flask, g
+from flask import Flask, g, Response, make_response
 
 app = Flask(__name__)
 app.debug = True     # use only debug!!
@@ -7,6 +7,17 @@ app.debug = True     # use only debug!!
 def before_request():
     print("before_request!!!")
     g.str = "한글"
+
+# response_class
+@app.route("/res1")
+def res1():  #test :111 은 header 에 실린다
+    custom_res = Response("Custom Response", 200, {'test': 'ttt'})
+    return make_response(custom_res)
+
+@app.route("/res2")
+# str : Simple String (HTML, JSON)
+def res2():
+    return make_response("custom response")
 
 @app.route("/")
 def helloworld():
