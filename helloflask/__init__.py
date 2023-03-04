@@ -4,6 +4,24 @@ from datetime import datetime, date
 app = Flask(__name__)
 app.debug = True     # use only debug!!
 
+# http://127.0.0.1:5000/wc?key=token&val=abc
+# inspection/application/cookie 에 setting 된것을 볼 수 있다.
+@app.route('/wc') #write cookies
+def wc():
+    key = request.args.get('key')
+    val = request.args.get('val')
+    res = Response("SET COOKIE")
+    res.set_cookie(key, val)
+    return make_response(res)
+
+
+# http://127.0.0.1:5000/rc?key=token
+@app.route('/rc') #read cookies
+def rc():
+    key = request.args.get('key') #token
+    val = request.cookies.get(key)
+    return "cookie[" + key +"]=" + val
+
 
 @app.route('/reqenv')
 def reqenv(): # %(REQUEST_METHOD) 안에 request.environ["REQUEST_METHOD"] 이 들어간다.
@@ -22,17 +40,17 @@ def reqenv(): # %(REQUEST_METHOD) 안에 request.environ["REQUEST_METHOD"] 이 �
             'wsgi.multiprocess: %(wsgi.multiprocess) s <br>'
             'wsgi.run_once: %(wsgi.run_once) s') % request.environ
 
-# # request 처리 용 함수
-# def ymd(fmt): #함수 trans 를 정의하고 return 한다 return 한 함수는 아래 ymt call 시 대치된다
-#     def trans(date_str): # date_str 은 date parameter(ex : 2019-02-26) 를 준다 ()
-#         return datetime.strptime(date_str, fmt)
-#     return trans
+# request 처리 용 함수
+def ymd(fmt): #함수 trans 를 정의하고 return 한다 return 한 함수는 아래 ymt call 시 대치된다
+    def trans(date_str): # date_str 은 date parameter(ex : 2019-02-26) 를 준다 ()
+        return datetime.strptime(date_str, fmt)
+    return trans
 
-# # http://127.0.0.1:5000/dt?date=2019-05-2 와 같이 부르거나 param 이 없으면 오늘 날짜가 사용된다
-# @app.route('/dt')
-# def dt():
-#     datestr = request.values.get('date', date.today(), type=ymd('%Y-%m-%d'))
-#     return "우리나라 시간 형식: " + str(datestr)
+# http://127.0.0.1:5000/dt?date=2019-05-2 와 같이 부르거나 param 이 없으면 오늘 날짜가 사용된다
+@app.route('/dt')
+def dt():
+    datestr = request.values.get('date', date.today(), type=ymd('%Y-%m-%d'))
+    return "우리나라 시간 형식: " + str(datestr)
 
 # http://127.0.0.1:5000/rp?q=123 을 실행하면 q=123 이 출력됨
 # @app.route('/rp')
