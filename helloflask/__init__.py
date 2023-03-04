@@ -1,7 +1,21 @@
 from flask import Flask, g, request, Response, make_response
+from datetime import datetime, date
 
 app = Flask(__name__)
 app.debug = True     # use only debug!!
+
+
+# request 처리 용 함수
+def ymd(fmt): #함수 trans 를 정의하고 return 한다 return 한 함수는 아래 ymt call 시 대치된다
+    def trans(date_str): # date_str 은 date parameter(ex : 2019-02-26) 를 준다 ()
+        return datetime.strptime(date_str, fmt)
+    return trans
+
+# http://127.0.0.1:5000/dt?date=2019-05-2 와 같이 부르거나 param 이 없으면 오늘 날짜가 사용된다
+@app.route('/dt')
+def dt():
+    datestr = request.values.get('date', date.today(), type=ymd('%Y-%m-%d'))
+    return "우리나라 시간 형식: " + str(datestr)
 
 # http://127.0.0.1:5000/rp?q=123 을 실행하면 q=123 이 출력됨
 # @app.route('/rp')
