@@ -1,8 +1,20 @@
-from flask import Flask, g, request, Response, make_response
-from datetime import datetime, date
+from flask import Flask, g, request, Response, make_response, session
+from datetime import datetime, date, timedelta
 
 app = Flask(__name__)
 app.debug = True     # use only debug!!
+
+app.config.update(
+	SECRET_KEY='X1243yRH!mMwf',
+	SESSION_COOKIE_NAME='pyweb_flask_session',
+	PERMANENT_SESSION_LIFETIME=timedelta(31)      # 31 days  cf. minutes=30
+)
+
+@app.route('/delsess')
+def delsess():
+    if session.get('Token'):
+        del session['Token']
+    return "Session이 삭제되었습니다!"
 
 # http://127.0.0.1:5000/wc?key=token&val=abc
 # inspection/application/cookie 에 setting 된것을 볼 수 있다.
@@ -12,6 +24,7 @@ def wc():
     val = request.args.get('val')
     res = Response("SET COOKIE")
     res.set_cookie(key, val)
+    session["Token"] = '123X' # toekn 을 cookie 와 같이 seting 함
     return make_response(res)
 
 
@@ -20,7 +33,7 @@ def wc():
 def rc():
     key = request.args.get('key') #token
     val = request.cookies.get(key)
-    return "cookie[" + key +"]=" + val
+    return "cookie[" + key +"]=" + val + "," + session.get('Token')
 
 
 @app.route('/reqenv')
