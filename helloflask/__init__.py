@@ -5,17 +5,34 @@ app = Flask(__name__)
 app.debug = True     # use only debug!!
 
 
-# request 처리 용 함수
-def ymd(fmt): #함수 trans 를 정의하고 return 한다 return 한 함수는 아래 ymt call 시 대치된다
-    def trans(date_str): # date_str 은 date parameter(ex : 2019-02-26) 를 준다 ()
-        return datetime.strptime(date_str, fmt)
-    return trans
+@app.route('/reqenv')
+def reqenv(): # %(REQUEST_METHOD) 안에 request.environ["REQUEST_METHOD"] 이 들어간다.
+    return ('REQUEST_METHOD: %(REQUEST_METHOD) s <br>'
+            'SCRIPT_NAME: %(SCRIPT_NAME) s <br>'
+            'PATH_INFO: %(PATH_INFO) s <br>'
+            'QUERY_STRING: %(QUERY_STRING) s <br>'
+            'SERVER_NAME: %(SERVER_NAME) s <br>'
+            'SERVER_PORT: %(SERVER_PORT) s <br>'
+            'SERVER_PROTOCOL: %(SERVER_PROTOCOL) s <br>'
+            'wsgi.version: %(wsgi.version) s <br>'
+            'wsgi.url_scheme: %(wsgi.url_scheme) s <br>'
+            'wsgi.input: %(wsgi.input) s <br>'
+            'wsgi.errors: %(wsgi.errors) s <br>'
+            'wsgi.multithread: %(wsgi.multithread) s <br>'
+            'wsgi.multiprocess: %(wsgi.multiprocess) s <br>'
+            'wsgi.run_once: %(wsgi.run_once) s') % request.environ
 
-# http://127.0.0.1:5000/dt?date=2019-05-2 와 같이 부르거나 param 이 없으면 오늘 날짜가 사용된다
-@app.route('/dt')
-def dt():
-    datestr = request.values.get('date', date.today(), type=ymd('%Y-%m-%d'))
-    return "우리나라 시간 형식: " + str(datestr)
+# # request 처리 용 함수
+# def ymd(fmt): #함수 trans 를 정의하고 return 한다 return 한 함수는 아래 ymt call 시 대치된다
+#     def trans(date_str): # date_str 은 date parameter(ex : 2019-02-26) 를 준다 ()
+#         return datetime.strptime(date_str, fmt)
+#     return trans
+
+# # http://127.0.0.1:5000/dt?date=2019-05-2 와 같이 부르거나 param 이 없으면 오늘 날짜가 사용된다
+# @app.route('/dt')
+# def dt():
+#     datestr = request.values.get('date', date.today(), type=ymd('%Y-%m-%d'))
+#     return "우리나라 시간 형식: " + str(datestr)
 
 # http://127.0.0.1:5000/rp?q=123 을 실행하면 q=123 이 출력됨
 # @app.route('/rp')
