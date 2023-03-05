@@ -1,7 +1,13 @@
-from flask import Flask, g, request, Response, make_response, session
-from datetime import datetime, date, timedelta
+from flask import Flask, g, request, Response, make_response
+from flask import session, render_template, Markup, url_for
+from datetime import date, datetime, timedelta
+import os
 
 app = Flask(__name__)
+# import helloflask.views
+# import helloflask.tests
+import helloflask.filters
+
 app.debug = True     # use only debug!!
 
 app.config.update(
@@ -9,6 +15,22 @@ app.config.update(
 	SESSION_COOKIE_NAME='pyweb_flask_session',
 	PERMANENT_SESSION_LIFETIME=timedelta(31)      # 31 days  cf. minutes=30
 )
+
+# http://127.0.0.1:5000/
+@app.route('/')
+def idx():
+    return render_template('app.html')
+
+
+# http://127.0.0.1:5000/top100
+@app.route('/top100')
+def top100():
+    return render_template('application.html', title='MAIN!')
+
+# http://127.0.0.1:5000/main
+@app.route('/main')
+def main():
+    return render_template('main.html', title='MAIN!')
 
 @app.route('/delsess')
 def delsess():
@@ -107,6 +129,6 @@ def wsgi_test():
 
     return make_response(application)
 
-@app.route("/")
-def helloworld():
-    return "Hello World!" + getattr(g, 'str', '111')  # '111' 은 default 값임
+# @app.route("/")
+# def helloworld():
+#     return "Hello World!" + getattr(g, 'str', '111')  # '111' 은 default 값임
