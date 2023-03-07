@@ -4,6 +4,7 @@
 </h3>
 {%- endmacro %}
 
+<!-- caller 를 caller(name + ":QQQ") 호출할때 param 을 넘겨줄 수 있다. -->
 {% macro test_macro2(name, class='aaa') -%}
 <h3 class="{{class}}">
     TEST MACRO2: {{name}} - {{test_macro2.caller}}

@@ -19,7 +19,7 @@ app.config.update(
 # http://127.0.0.1:5000/
 @app.route('/')
 def idx():
-    return render_template('app.html')
+    return render_template('app.html', ttt="TestTTT")
 
 
 # http://127.0.0.1:5000/top100
