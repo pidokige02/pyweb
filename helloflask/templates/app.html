@@ -43,6 +43,19 @@
         <label class="custom-control-label" for="defaultChecked">Default checked</label>
     </div>
 
+    <button type="button" onclick="openModal('mdl1')" class="btn btn-primary">Open
+        modal Test</button>
+
+    {% call modal('mdl1', '테스트 모달', 'fas fa-users', True, "fn_test()") %}
+        <h3>Modal body</h3>
+        <script>
+            function fn_test() {
+                alert('qqqqqqqqqqqqqqqqqqqqq');
+                closeModal('mdl1');
+            }
+        </script>
+    {% endcall %}
+
     {{input('password')}}
 {% endblock %}
 
