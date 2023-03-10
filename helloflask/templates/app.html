@@ -9,17 +9,29 @@
     <p>{{today | simpledate | safe}}</p>
     <p>{{ 3096 | filesizeformat(True) }}</p>
     <p>{{ "  3096.53456" | float | round(2) }}</p>
-    <div>
-        <table>
-        {% for row in range(-2,32) | batch(7, '&nbsp;') %}
-        <tr>
-            {% for col in row %}
-                <td>{{col | safe}}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
+
+    <div class="container text-center">
+        <h1>{{mm}} 월</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    {%- for w in '일월화수목금토' %}
+                        <th>{{w}}</th>
+                    {% endfor -%}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in range(sdt, edt) | batch(7, '&nbsp;') %}
+                <tr>
+                    {% for col in row %}
+                        <td>{% if ((col|int) <= 0) %}&nbsp;{%else%}{{col | safe}}{%endif%}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
+
     <pre>
         <!-- abc 기 40 글자의 가운데에 위치한다. -->
         {{'abc' | center(40)}}

@@ -31,7 +31,7 @@ def simpledate(dt):
     return "<strong>%s</strong>" % dt.strftime(fmt)
 
 
-@app.template_filter('sdt')
+@app.template_filter('sdt')  # start date
 def sdt(dt, fmt='%Y-%m-%d'):
     d = make_date(dt, fmt)
     wd = d.weekday()
@@ -42,13 +42,13 @@ def sdt(dt, fmt='%Y-%m-%d'):
     return (1 if wd == 6 else wd) * -1
 
 
-@app.template_filter('month')
+@app.template_filter('month') # month
 def month(dt, fmt='%Y-%m-%d'):
     d = make_date(dt, fmt)
     return d.month
 
 
-@app.template_filter('edt')
+@app.template_filter('edt') #end date
 def edt(dt, fmt='%Y-%m-%d'):
     d = make_date(dt, fmt)
     nextMonth = d + relativedelta(months=1)
