@@ -5,8 +5,31 @@
 
 <!-- __init_.py 에서 ttt 뱐수를 정의하고 html call 할대 넘겨줄수 있다 -->
 {% block test %}
+    <p>{{today | ymd('%Y-%m-%d %H:%M') | safe}}</p>
+    <p>{{today | simpledate | safe}}</p>
+    <p>{{ 3096 | filesizeformat(True) }}</p>
+    <p>{{ "  3096.53456" | float | round(2) }}</p>
+    <div>
+        <table>
+        {% for row in range(-2,32) | batch(7, '&nbsp;') %}
+        <tr>
+            {% for col in row %}
+                <td>{{col | safe}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+    <pre>
+        <!-- abc 기 40 글자의 가운데에 위치한다. -->
+        {{'abc' | center(40)}}
+        {{'abcsdfdsaffdsadasa' | center(40)}}
+        {{ ('abcsdfdsaffdsadasa' * 5) | wordwrap(40)}}
+        {{ ('abcsdfdsaffdsadasa' * 5) | truncate(40)}}
+    </pre>
+
     <p>{{ttt}}::{{ cm.test_macro('TTTTTTTT1122333') }}</p>
-    <p>{{ test_macro('SSSSSSSS') }}</p>
+    <p>{{ test_macro('QQQQQQQQQQQ') }}</p>
 
     {% call(x) cm.test_macro2('Hong', 'bbb') %}
         <p>This is app.html.call block: <strong>{{x}}</strong></p>

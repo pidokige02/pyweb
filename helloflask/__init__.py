@@ -1,6 +1,8 @@
 from flask import Flask, g, request, Response, make_response
 from flask import session, render_template, Markup, url_for
 from datetime import date, datetime, timedelta
+from helloflask.classes import FormInput
+
 import os
 
 app = Flask(__name__)
@@ -19,9 +21,21 @@ app.config.update(
 # http://127.0.0.1:5000/
 @app.route('/')
 def idx():
-    return render_template('app.html', ttt="TestTTT")
-
-
+    rds = []
+    for i in [1,2,3]:
+        id = 'r' + str(i)
+        name = 'radiotest'
+        value = i
+        checked = ''
+        if i == 2:
+            checked = 'checked'
+        text = 'RadioTest' + str(i)
+        rds.append( FormInput(id, name, value, checked, text) )
+    # today = date.today()
+    # today = datetime.now()
+    today = datetime.strptime('2019-02-14 09:22', '%Y-%m-%d %H:%M')
+    # today = '2019-02-14 09:22'
+    return render_template('app.html', ttt='TestTTT999', radioList=rds, today=today)
 # http://127.0.0.1:5000/top100
 @app.route('/top100')
 def top100():
