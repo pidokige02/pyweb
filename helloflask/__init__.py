@@ -32,17 +32,24 @@ def idx():
             checked = 'checked'
         text = 'RadioTest' + str(i)
         rds.append( FormInput(id, name, value, checked, text) )
+# remard for basic datatime test
     # # today = date.today()
     # # today = datetime.now()
     # today = datetime.strptime('2019-02-14 09:22', '%Y-%m-%d %H:%M')
         today = '2023-03-11 09:22'
     # return render_template('app.html', ttt='TestTTT999', radioList=rds, today=today)
         d = datetime.strptime("2023-03-01", "%Y-%m-%d")
-        sdt = d.weekday() * -1  # 목요일이면 월화수가 빠져버린다
-        nextMonth = d + relativedelta(months=1)
-        mm = d.month
-        edt = (nextMonth - timedelta(1)).day + 1  # 마지말 요일을 계산한
-        return render_template('app.html', sdt=sdt, edt=edt, mm=mm, ttt='TestTTT999', radioList=rds, today=today)
+# remark for keeping one month calander
+        # sdt = d.weekday() * -1  # 목요일이면 월화수가 빠져버린다
+        # nextMonth = d + relativedelta(months=1)
+        # mm = d.month
+        # edt = (nextMonth - timedelta(1)).day + 1  # 마지말 요일을 계산한
+        # return render_template('app.html', sdt=sdt, edt=edt, mm=mm, ttt='TestTTT999', radioList=rds, today=today)
+
+    # year = 2023
+    # accessing paramter like /?year=2023
+    year = request.args.get('year', date.today().year, int)
+    return render_template('app.html', year=year, ttt='TestTTT999', radioList=rds, today=today)
 
 # http://127.0.0.1:5000/top100
 @app.route('/top100')

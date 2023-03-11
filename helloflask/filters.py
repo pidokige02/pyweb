@@ -40,6 +40,8 @@ def sdt(dt, fmt='%Y-%m-%d'):
     # else:
     #     return wd
     return (1 if wd == 6 else wd) * -1
+# wd 가 6이면 1울 return 하고, 아니면 wd 를 return 한다.
+# 1일이 일요일인 경우 처음 row 가 blank 인 경우를 처리하기 위함임
 
 
 @app.template_filter('month') # month
