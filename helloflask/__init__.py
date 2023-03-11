@@ -13,6 +13,21 @@ import helloflask.filters
 
 app.debug = True     # use only debug!!
 
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime) # modified 된 시간을 key 값 q에 집어넣는다.
+    return url_for(endpoint, **values)
+# 이함수는 static 으로의 URL을 변경시킨다. original+?qxxxx
+
+
+@app.context_processor  # # context 가 만들어질 경우 어떻게 할 것인가.
+def override_url_for():
+    return dict(url_for=dated_url_for)  ##url_for을 불렀을 경우는 dated_url_for 로 가라. (flask의 확장기능임)
+
 app.config.update(
 	SECRET_KEY='X1243yRH!mMwf',
 	SESSION_COOKIE_NAME='pyweb_flask_session',
