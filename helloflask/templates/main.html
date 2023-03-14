@@ -10,6 +10,15 @@
     {{ super() }}
     aaaaaaaaaaaa
     <div>
+        <ul>
+            {% for user in userlist %}
+            <li>{{user.id}}.{{user.email}} {{user.nickname}}</li>
+            {% else %}
+            <li>There is no users.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
         <h1>Albums</h1>
         <ul>
         {% for a in albums %}
@@ -43,6 +52,7 @@
 </div>
 
     <div>
+        {% if year %}
         <h1 class="text-center text-danger">
             <small><a href="/?year={{year - 1}}" class="text-muted">{{year - 1}}</a></small>
             {{year}}년
@@ -56,14 +66,15 @@
             </div>
             {% endfor %}
         </div>
+        {% endif %}
     </div>
 
+    {% if today %}
     <p>{{today | ymd('%H:%M') | safe}}</p>
     <p>{{today | simpledate | safe}}</p>
     <p>{{ 3096 | filesizeformat(True) }}</p>
     <p>{{ "  3096.53456" | float | round(2) }}</p>
-
-
+    {% endif %}
 
 
     <pre>
@@ -117,6 +128,3 @@
     {{ super() }}
     {% block inner_block %} BBBBBB {% endblock inner_block %}
 {% endblock outer_block %}
-
-
-

@@ -5,6 +5,7 @@
 
 <!-- __init_.py 에서 ttt 뱐수를 정의하고 html call 할대 넘겨줄수 있다 -->
 {% block test %}
+    {% if year %}
     <h1 class="text-center text-primary">
         <small ><a href="/?year={{year-1}}" class="text-muted">{{year-1}}</a></small>
         {{year}}년
@@ -20,9 +21,13 @@
             {% endfor %}
         {% endfor %}
     </div>
+    {% endif %}
 
+    {% if today %}
     <p>{{today | ymd('%Y-%m-%d %H:%M') | safe}}</p>
     <p>{{today | simpledate | safe}}</p>
+    {% endif %}
+
     <p>{{ 3096 | filesizeformat(True) }}</p>
     <p>{{ "  3096.53456" | float | round(2) }}</p>
 
