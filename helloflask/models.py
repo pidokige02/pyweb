@@ -12,7 +12,7 @@ class Album(Base):
     likecnt = Column(Integer)
     rate = Column(Float)
     crawldt = Column(String)
-    songs = relationship('Song')
+    songs = relationship('Song')  #list 형태임
 
 class Song(Base):
     __tablename__ = 'Song'
@@ -21,18 +21,9 @@ class Song(Base):
     genre = Column(String)
     likecnt = Column(Integer)
     albumid = Column(String, ForeignKey('Album.albumid'), nullable=False)
-    # album = relationship('Album', backref=backref('Album'))
-    album = relationship('Album')
+    album = relationship('Album', backref=backref('Album'))  # 양쪽다 관계를 갖는다는 것을 의미함
+    # album = relationship('Album')
     songartists = relationship('SongArtist')
-
-    # def __init__(self, songno=None, title=None, genre=None, likecnt=None, albumid=None ):
-    #     self.songno = songno
-    #     self.title = title
-    #     self.genre = genre
-    #     self.likecnt = likecnt
-    #     self.albumid = albumid
-
-
 
 
 class SongRank(Base):

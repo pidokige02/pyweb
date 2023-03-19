@@ -10,11 +10,20 @@
     {{ super() }}
     aaaaaaaaaaaa
     <div>
+        {% if userlist %}
         <ul>
             {% for user in userlist %}
             <li>{{user.id}}.{{user.email}} {{user.nickname}}</li>
             {% else %}
             <li>There is no users.</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <ul>
+            {% for s in ret %}
+                <li>{{s.songno}}.{{s.title}} ({{s.likecnt}}) - <strong>{{s.album.title}}</strong></li>
+            {% else %}
+                <li>There is no ret.</li>
             {% endfor %}
         </ul>
     </div>

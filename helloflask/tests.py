@@ -17,7 +17,9 @@ def sqltest():
     ret = 'OK'
     try:
         # sample codes 1 for add and field update
-        # u = User('abc@efg.com', 'hong')
+        # u = User('11abc@efg.com', 'hong')
+        # db_session.add(u)
+        # u = User('12abc@efg.com', 'hong')
         # db_session.add(u)
         # u = User.query.filter(User.id == 2).first()
         # print("user.id", u.id)
@@ -41,7 +43,7 @@ def sqltest():
             print(r)  # display as tuple type
 
         for r in rrr:
-            print(*r) # display as tuple 이 제거된 형태임
+            print(*r) # display as "tuple 이 제거된 형태임"
 
         print(">>", type(result), result.keys(), rrr)
         records = [Record(*r) for r in rrr] # *r 은 rrr 에 있는 것을 모두 다 주세요라는 의미임
@@ -50,15 +52,6 @@ def sqltest():
 
         s.close()
         ret = records
-
-        # sample codes 4 for updating song.
-        # print("Song")
-        # u = Song('0000001', '피어나도록 (love you twice)', '발라드', 3206, '0000001')
-        # print("Song",u)
-        # db_session.add(u)
-        # db_session.commit()  # session made by flask
-        # ret = Song.query.all()  # query all data.
-
 
     except SQLAlchemyError as sqlerr:
         db_session.rollback()
@@ -73,13 +66,64 @@ def sqltest():
     # return "RET=" + str(ret)
     return render_template('main.html', userlist=ret)
 
-@app.route('/sql')
-def sql():
-    # ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists, SongArtist.artist))
-    ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists)).options(
-        subqueryload(Song.songartists, SongArtist.artist)).order_by('atype')
+@app.route('/sql3')
+def sql3():
+    # albums = Album.query.order_by(Album.albumid.desc()).limit(5)
+    # albums = Album.query.filter(Album.albumid == '0000001').all()
+
+    albums = Album.query.options(joinedload(
+        Album.songs)).filter_by(albumid='0000002').all()
+
+    return render_template('main.html', albums=albums)
+
+# pre-load (sametime)
+@app.route('/sql2')
+def sql2():
+# 아래 two case 가 모두 같은 기능으로 동작함 (subqueryload vs joinedload) w/ backref
+    # ret = db_session.query(Song).options(subqueryload(Song.album))\
+    #       .filter(Song.likecnt < 10000)
+
+    ret = Song.query.options(joinedload(Song.album))\
+              .filter(Song.likecnt < 10000)
+
     return render_template('main.html', ret=ret)
 
+# select by each record
+@app.route('/sql')
+def sql():
+    # song 만 select 했는데 album 의 title 조회가 가능함 (in main.html)(ORM 의 power)
+    # ret = Song.query.filter(Song.likecnt < 10000) # backref enable 생태에서 test 함
+    # ret = Song.query.join(Album, Song.albumid == Album.albumid).filter(Song.likecnt < 10000)
+    # 위 2 codes 는 같은 기능을 하는 것임
+
+    ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists, SongArtist.artist))
+
+    # ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists)).options(
+    #     subqueryload(Song.songartists, SongArtist.artist)).order_by('atype')
+    return render_template('main.html', ret=ret)
+
+@app.route('/addref')
+def addref():
+    aid = 'TTT-a1'
+    a1 = Album.query.filter(Album.albumid==aid)
+    print("a1=----------->>", a1, a1.count())
+    if a1.count() == 0:
+        a1 = Album(albumid=aid, title='TTT-album')
+    else:
+        a1 = a1.one()
+
+    song1 = Song(songno='TTT3', title='TTT3 Title')
+    song1.album = a1
+
+    # 1 : n
+    # song1.albums = [ a1, a2 ] #song 에 album 이 여러개 일 경우 assign 하는 방법
+
+    # album 이 db 에 없으면 song만 넣어도 db에 song 과 같이 들어간다.
+    db_session.add(song1)
+    db_session.commit()
+
+    print("song1=", song1)
+    return "OK"
 
 # http://127.0.0.1:5000/calendar
 @app.route('/calendar')
