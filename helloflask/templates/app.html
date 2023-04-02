@@ -3,9 +3,9 @@
 {% from "macro/tests.html" import test_macro %}
 {% from "macro/forms.html" import input, radio, radios, textarea, checkbox, select, modal, cal, song %}
 
-<!-- __init_.py 에서 ttt 뱐수를 정의하고 html call 할대 넘겨줄수 있다 -->
+<!-- __init_.py 에서 ttt 뱐수를 정의하고 html call 할때 넘겨줄수 있다 -->
 {% block test %}
-    {% if year %}
+    <!-- {% if year %}
     <h1 class="text-center text-primary">
         <small ><a href="/?year={{year-1}}" class="text-muted">{{year-1}}</a></small>
         {{year}}년
@@ -29,24 +29,24 @@
     {% endif %}
 
     <p>{{ 3096 | filesizeformat(True) }}</p>
-    <p>{{ "  3096.53456" | float | round(2) }}</p>
+    <p>{{ "  3096.53456" | float | round(2) }}</p> -->
 
-    <pre>
+    <!-- <pre> -->
         <!-- abc 기 40 글자의 가운데에 위치한다. -->
-        {{'abc' | center(40)}}
+        <!-- {{'abc' | center(40)}}
         {{'abcsdfdsaffdsadasa' | center(40)}}
         {{ ('abcsdfdsaffdsadasa' * 5) | wordwrap(40)}}
         {{ ('abcsdfdsaffdsadasa' * 5) | truncate(40)}}
-    </pre>
+    </pre> -->
 
-    <p>{{ttt}}::{{ cm.test_macro('TTTTTTTT1122333') }}</p>
-    <p>{{ test_macro('QQQQQQQQQQQ') }}</p>
+    <!-- <p>{{ttt}}::{{ cm.test_macro('TTTTTTTT1122333') }}</p>
+    <p>{{ test_macro('QQQQQQQQQQQ') }}</p> -->
 
-    {% call(x) cm.test_macro2('Hong', 'bbb') %}
+    <!-- {% call(x) cm.test_macro2('Hong', 'bbb') %}
         <p>This is app.html.call block: <strong>{{x}}</strong></p>
-    {% endcall %}
+    {% endcall %} -->
 
-    <form class="container">
+    <!-- <form class="container">
         <div class="form-group">
             {{radio('r1', 'rdo', 'val1', 'Value1')}}
             {{radio('r2', 'rdo', 'val2', 'Value2', "checked")}}
@@ -57,27 +57,27 @@
 
         {{input()}}
         {{input('password', 'pm')}}
-        {{textarea('idta', 'content', 'default value')}}
+        {{textarea('idta', 'content', 'default value')}} -->
 
         <!-- making checkbox w/ dictionary 순서를 신경쓰지 않아도 된다-->
-        {{checkbox(dict(id='chk1', name='chkname', checked='checked', text='TEXT'))}}
+        <!-- {{checkbox(dict(id='chk1', name='chkname', checked='checked', text='TEXT'))}}
         {{select([dict(id='selid1', text='seltext1', selected=False),
             dict(id='selid2', text='seltext2', selected=True)])}}
-    </form>
+    </form> -->
 
     <!-- Default unchecked -->
-    <div class="custom-control custom-radio">
+    <!-- <div class="custom-control custom-radio">
         <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
         <label class="custom-control-label" for="defaultUnchecked">Default unchecked</label>
-    </div>
+    </div> -->
 
     <!-- Default checked -->
-    <div class="custom-control custom-radio">
+    <!-- <div class="custom-control custom-radio">
         <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
         <label class="custom-control-label" for="defaultChecked">Default checked</label>
-    </div>
+    </div> -->
 
-    <button type="button" onclick="openModal('mdl1')" class="btn btn-primary">Open
+    <!-- <button type="button" onclick="openModal('mdl1')" class="btn btn-primary">Open
         modal Test</button>
 
     {% call modal('mdl1', '테스트 모달', 'fas fa-users', True, "fn_test()") %}
@@ -90,7 +90,7 @@
         </script>
     {% endcall %}
 
-    {{input('password')}}
+    {{input('password')}} -->
 {% endblock %}
 
 {% block main %}
@@ -146,13 +146,15 @@
             }
         });
     }
-
+// client framework을 쓰지 않으면 이와 같이 coding 을 한다
     function openSongInfo(songno) {
         var url = "/songinfo/" + songno
         console.log("url>>", url)
         // url, method, data, dataType, fn
+        // id 가 songno 임
         var $songinfo = $('#' + songno);
-        $('.songinfo').css('display', 'none');
+        // songinfo 가 class 
+        $('.songinfo').css('display', 'none'); // 이전에 선택됬던 것을 숨기는 것임
         send_ajax(url, 'GET', '', '', function(res) {
             console.log("res>>", res)
             $songinfo.html(res);

@@ -29,13 +29,16 @@ def sqltest():
         # db_session.commit()  # session made by flask
         # ret = User.query.all()  # query all data.
 
+        ##############################################
         # sample codes 2 for update
 
         # sample codes 3 for select
         # 아래보다는 위와 같이 class를 만들어 쓰는 것이 좋은 codes임
-        s = db_session()
-        result = s.execute(text('select id, email, nickname from User where id > :id'), {'id': 5})
-        print(">>", result.keys())
+        s = db_session() # s는 sub session 임
+        result = s.execute(text('select id, email, nickname from User where id > :id'), {'id': 1})
+        print("1>>", result.keys())
+
+        # 아래 부분을 function 으로 만들어 자유롭게 쓸수 있다.
         Record = namedtuple('User', result.keys()) # list type 을 map type 을 변경한다.
         rrr = result.fetchall()  # tuple 의 list 형태로 반환됨
 
@@ -45,13 +48,14 @@ def sqltest():
         for r in rrr:
             print(*r) # display as "tuple 이 제거된 형태임"
 
-        print(">>", type(result), result.keys(), rrr)
+        print("2>>", type(result), result.keys(), rrr)
         records = [Record(*r) for r in rrr] # *r 은 rrr 에 있는 것을 모두 다 주세요라는 의미임
         for r in records:
             print(r, r.nickname, type(r))
 
         s.close()
         ret = records
+        print ('jinha', ret)
 
     except SQLAlchemyError as sqlerr:
         db_session.rollback()
@@ -69,10 +73,10 @@ def sqltest():
 @app.route('/sql3')
 def sql3():
     # albums = Album.query.order_by(Album.albumid.desc()).limit(5)
-    # albums = Album.query.filter(Album.albumid == '0000001').all()
+    albums = Album.query.filter(Album.albumid == '0000014').all()
 
-    albums = Album.query.options(joinedload(
-        Album.songs)).filter_by(albumid='0000002').all()
+    # albums = Album.query.options(joinedload(
+    #     Album.songs)).filter_by(albumid='0000005').all()
 
     return render_template('main.html', albums=albums)
 
@@ -80,26 +84,30 @@ def sql3():
 @app.route('/sql2')
 def sql2():
 # 아래 two case 가 모두 같은 기능으로 동작함 (subqueryload vs joinedload) w/ backref
-    # ret = db_session.query(Song).options(subqueryload(Song.album))\
-    #       .filter(Song.likecnt < 10000)
+    ret = db_session.query(Song).options(subqueryload(Song.album))\
+          .filter(Song.likecnt < 10000)
 
-    ret = Song.query.options(joinedload(Song.album))\
-              .filter(Song.likecnt < 10000)
+    # ret = Song.query.options(joinedload(Song.album))\
+    #           .filter(Song.likecnt < 10000)
+    albums = Album.query.filter(Album.albumid == '0000014').all()
 
-    return render_template('main.html', ret=ret)
+    return render_template('main.html', ret=ret, albums=albums)
 
 # select by each record
 @app.route('/sql')
 def sql():
     # song 만 select 했는데 album 의 title 조회가 가능함 (in main.html)(ORM 의 power)
-    # ret = Song.query.filter(Song.likecnt < 10000) # backref enable 생태에서 test 함
+    # ret = Song.query.filter(Song.likecnt < 10000) # backref enable 상태에서 test 함
+    # for r in ret:
+    #     print("jinha>>",r.songno, r.title, r.genre)
+    
     # ret = Song.query.join(Album, Song.albumid == Album.albumid).filter(Song.likecnt < 10000)
     # 위 2 codes 는 같은 기능을 하는 것임
 
-    ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists, SongArtist.artist))
+    # ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists, SongArtist.artist))
 
-    # ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists)).options(
-    #     subqueryload(Song.songartists, SongArtist.artist)).order_by('atype')
+    ret = Song.query.options(joinedload(Song.album)).filter(Song.likecnt < 10000).options(joinedload(Song.songartists)).options(
+        subqueryload(Song.songartists, SongArtist.artist)).order_by(text('atype'))
     return render_template('main.html', ret=ret)
 
 @app.route('/addref')
@@ -155,7 +163,7 @@ def calendar():
     # year = 2023
     # accessing paramter like /?year=2023
     year = request.args.get('year', date.today().year, int)
-    return render_template('app.html', year=year, ttt='TestTTT999', radioList=rds, today=today)
+    return render_template('main.html', year=year, ttt='TestTTT999', radioList=rds, today=today)
 
 
 # http://127.0.0.1:5000/top100

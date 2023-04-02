@@ -31,7 +31,7 @@ class SongRank(Base):
     id = Column(Integer, primary_key=True)
     rankdt = Column(String)
     songno = Column(String, ForeignKey('Song.songno'), nullable=False)
-    rank = Column(Integer)
+    srank = Column(Integer)
     song = relationship('Song')
 
 
@@ -109,9 +109,10 @@ class Mycom(Base):
         return j
     #    return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+#  id 가 string 이면 만들어진 id 로 보먄된다. autoincrement 가 아니므로.
 class SongInfo(Base):
-    __tablename__ = 'SongInfo'
-    id = Column(String, primary_key=True)
+    __tablename__ = 'v_sa_grp'  # 원래는 view 를 이용 한 'v_sa_grp' 으로 만든 table 이었음
+    id = Column(String, primary_key=True) # 이것을 추가한 이휴에 songinfo 가 정상적으로 나오게 되었다
     songno = Column(String)
     names = Column(String)
     atype = Column(Integer)

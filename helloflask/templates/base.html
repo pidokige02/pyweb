@@ -56,14 +56,14 @@
     <!-- MDB core JavaScript -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/mdb.min.js')}}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/handlebars.js')}}"></script>
-    
+
     <!-- Initializations -->
     <script type="text/javascript">
         // Animations initialization
         new WOW().init();
 
         // $(document).ready
-        
+
         function openModal(modalId) {
             $('#' + modalId).modal('show');
         }
@@ -102,7 +102,8 @@
             var html = template(data);
             document.getElementById(resultId).innerHTML = html;
         }
-
+        
+// home 로 갈때 favorite 로 선택된 것이 자동으로 선택되게 한다.
         $(document).ready(function () {
             var path = '{{request.path}}';
             // console.log("path>>", path)

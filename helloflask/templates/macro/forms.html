@@ -1,5 +1,5 @@
 {% macro input(type='text', id='', name='', value='', class='') -%}
-<input type="{{type}}" 
+<input type="{{type}}"
     {% if id %}id="{{id}}"{% endif %}
     name="{{name}}"
     value="{{value}}"
@@ -64,14 +64,14 @@
 <!--Small news-->
 <div class="row">
     <div class="col-md-2">
-        <h1 class="text-primary">{{s.rank}}</h1>
+        <h1 class="text-primary">{{s.srank}}</h1>
     </div>
     <div class="col-md-3">
 
         <!--Image-->
         <div class="view overlay rounded z-depth-1x text-center">
             <a>
-                <img src="/static/img/album_img/{{s.rank}}.jpg" class="img-fluid w-100" alt="Minor sample post image">
+                <img src="/static/img/album_img/{{s.srank}}.jpg" class="img-fluid w-100" alt="Minor sample post image">
                 <div class="mask rgba-white-slight"></div>
             </a>
         </div>
